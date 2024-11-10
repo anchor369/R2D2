@@ -1,0 +1,46 @@
+The "Permission denied (publickey)" error usually happens when the SSH server on the Raspberry Pi is configured to only accept specific authentication methods, and password authentication might be disabled.
+
+Here are a few steps to troubleshoot and resolve this:
+
+1. **Verify SSH Access**  
+   Try manually logging into the Raspberry Pi with the command:
+   ```bash
+   ssh aadish@192.168.70.63
+   ```
+   If it prompts for a password, SSH access should be available, and we can proceed with `ssh-copy-id`. If you still get a "Permission denied" error, make sure:
+   - The `sshd` server on the Raspberry Pi is configured to allow password-based authentication.
+   - You’re using the correct username (`aadish`) and IP address.
+
+2. **Check SSH Configuration on Raspberry Pi**  
+   If you have another way to access the Raspberry Pi (such as connecting a monitor and keyboard directly):
+   - Open the SSH configuration file on the Pi:
+     ```bash
+     sudo nano /etc/ssh/sshd_config
+     ```
+   - Make sure these settings are configured as follows:
+     ```plaintext
+     PubkeyAuthentication yes
+     PasswordAuthentication yes
+     ```
+   - Save the changes, then restart the SSH service:
+     ```bash
+     sudo systemctl restart ssh
+     ```
+
+3. **Manually Copy the Key**  
+   If `ssh-copy-id` still doesn’t work, you can manually copy the public key:
+   - Copy your public key to the clipboard:
+     ```bash
+     cat ~/.ssh/id_rsa.pub
+     ```
+   - On the Raspberry Pi, open (or create) the `~/.ssh/authorized_keys` file:
+     ```bash
+     nano ~/.ssh/authorized_keys
+     ```
+   - Paste the key into this file, save, and close. Make sure the permissions on the `~/.ssh` folder and `authorized_keys` file are correct:
+     ```bash
+     chmod 700 ~/.ssh
+     chmod 600 ~/.ssh/authorized_keys
+     ```
+
+After trying these steps, you should be able to connect using SSH with your key.
