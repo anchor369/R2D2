@@ -10,4 +10,4 @@ $ ssh-keygen
 >
 $ cat id_rsa.pub<br>
 > copy and upload that key in pi_ssh file
->
+> this is a new change I am trying
